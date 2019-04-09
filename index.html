@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fix me!</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css">
+    <link rel="stylesheet" href="stylesheet.css">
+
+</head>
+<body class="bg-dark pt-4 pablostransition pablotransitionstart">
+<div id="exercisesHolder" class="container">
+
+
+    <div class="row">
+        <div class="col-12 bg-white shadow-sm p-4 mx-auto mt-4 border">
+            <!-- Start writing content here -->
+         
+            <span id="errormessage"></span></br>
+            <input id="field1" class= "mr-4 mb-2" >
+            <select id="menu" class= "mr-2">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="/">/</option>
+                <option value="*">*</option>
+            </select> 
+            <input id="field2"> </br>
+            <button class="btn btn-primary mb-4" >Calculate!</button>
+            <!--Eenmaal class, tweede maal wordt genegeerd.-->
+            <div class="border border-danger" id="divtekst"> Here is your result:<span id="result"></span>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+
+<script>
+    /** Write your javascript code here **/
+
+/*var button= document.querySelector(".btn") -> via class, je krijgt enkel het element*/
+var button= document.querySelector("button");
+/*-> opvragen via tag
+/*var button= document.getElementsByClass("btn")-> via class, je krijgt een html collectie weer */
+console.log(button);
+
+var inputfield1= document.querySelector("#field1");
+var inputfield2= document.querySelector("#field2");
+inputfield1.addEventListener("keyup",changeText);
+inputfield2.addEventListener("keyup",changeText);
+
+button.addEventListener ('click', calculate);
+// var key= document.querySelector("#exercisesHolder");
+// key.addEventListener ("keyup",changeText);
+
+function calculate (){
+   /* button.getElementsByClassName */
+  /*  button.classList.replace("btn-primary","btn-success");*/
+    button.classList.toggle("btn-success"); /*aan en uit zetten class */
+    button.textContent = "Calculating ...";
+    /*plaatsing van textContent = voor de icon -> ChildNodes*/
+
+    var icon= document.createElement ("i");
+    icon.classList.add ("fas","fa-spinner","mr-2", "fa-spin" );
+    button.insertBefore(icon, button.childNodes[0]);
+    /*button.*/
+
+    
+    var divinput= document.querySelector("#divtekst");
+    var spantekst=document.querySelector("#result");
+    var getal1 = parseFloat(inputfield1.value);
+    var getal2 = parseFloat(inputfield2.value);
+    var error = document.querySelector("#errormessage");
+    errormessage.textContent="";
+    var selectie= document.querySelector("#menu").value;
+    var resultaat;
+    
+
+
+    if (isNaN(getal1) || isNaN(getal2)){
+        errormessage.textContent="You can't do any operations if the content is anything but a number";
+                }else{
+
+        switch (selectie){
+            case "*": 
+                if (getal2 % 2 != 0){
+                    errormessage.textContent="Can't multiply by odd numbers!";
+                } else {
+                    resultaat= getal1 * getal2;
+                }
+                break;
+
+            case "/": 
+                if (getal2 == 0){            
+                        errormessage.textContent= "Can't divide by 0";
+                } else{                
+                    if (!Number.isInteger((getal1 / getal2)) )
+                    {
+                        errormessage.textContent= "Number not integer.";
+                    } else {
+                        resultaat= getal1 / getal2;
+                    }
+                }
+                /*eerst conditities checken, dan pas acties*/
+                break;
+            case "+": 
+                    resultaat= getal1 + getal2;
+                break;
+
+            case "-": 
+                if (getal2 >= getal1){
+                    errormessage.textContent="Can't substract from a smaller number"
+                }else{
+                    resultaat= getal1 - getal2;
+                }
+                break;     
+        }
+                    }
+        /*kan ook in een aparte functie staan*/
+
+    if (inputfield1== "" || inputfield2=="") {
+        error.textContent="Fout. Hebt u de velden ingevuld?";
+    } else {
+        
+    } 
+   
+    // var inputfield1value=inputfield1.value;-> lange manier
+    
+    
+
+
+    setTimeout(function(){
+        /*setTimeout is functie die je oproept*/
+    button.classList.replace("btn-success","btn-primary");
+    // button.classList.toggle("btn-primary"); -> blijkt niet te werken 
+    button.removeChild(button.childNodes [0]);   
+    button.textContent = "Calculate!";
+    
+    // spantekst.textContent = inputfield1;
+    spantekst.textContent= resultaat;
+    
+    
+
+  
+
+    }, 500);
+
+
+
+
+
+//console.log("clicky");
+
+}
+//functie naam (parameter) -> om te weten waar je 'rand' getypt hebt (met target)
+function changeText(e){
+    if (e.target.value == "rand"){
+        e.target.value= Math.floor (Math.random()*100);
+    
+    }else if (e.target.value == "Boom!"){
+        var body1=document.querySelector(".pablostransition");
+        console.log("Boom!");
+        body1.classList.replace("pablostransitionstart", "pablostransitionend");
+       
+    }
+}
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
